@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "declaration": true,
+        "pretty": true,
+        "forceConsistentCasingInFileNames": true,
+        "lib": ["es2017", "dom"],
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noImplicitAny": true,
+        "noUnusedLocals": true,
+        "outDir": "dist",
+        "rootDir": "src",
+        "sourceMap": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "target": "ES2017"
+    },
+    "include": [
+        "src/**/*.ts"
+    ]
+}
