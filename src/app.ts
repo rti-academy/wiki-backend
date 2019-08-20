@@ -16,6 +16,7 @@ async function run(port: number): Promise<void> {
     useExpressServer(app, {
         routePrefix: '/api',
         controllers: [__dirname + '/controllers/*'],
+        middlewares: [__dirname + '/middlewares/*'],
     });
 
     app.listen(port, () => console.log(`Server started on port ${port}`));
