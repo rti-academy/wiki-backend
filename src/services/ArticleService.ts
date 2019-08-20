@@ -3,7 +3,6 @@ import { getRepository, getConnection } from 'typeorm';
 import { Article } from '../entities/Article';
 import { CreateArticleBody } from '../requests/CreateArticleBody';
 import { UpdateArticleBody } from '../requests/UpdateArticleBody';
-import { ArticleData } from '../responses/ArticleData';
 
 export class ArticleService {
 
@@ -42,21 +41,21 @@ export class ArticleService {
         await getRepository(Article).delete(id);
     }
 
-    public async get(id: number): Promise<ArticleData> {
+    public async get(id: number): Promise<Article> {
         return getRepository(Article).findOneOrFail(id);
     }
 
-    public async search(query?: string): Promise<ArticleData[]> {
+    public async search(query?: string): Promise<Article[]> {
         return query
             ? this.getByQuery(query)
             : this.getAll();
     }
 
-    private async getAll(): Promise<ArticleData[]> {
+    private async getAll(): Promise<Article[]> {
         return getRepository(Article).find();
     }
 
-    private async getByQuery(query: string): Promise<ArticleData[]> {
+    private async getByQuery(query: string): Promise<Article[]> {
         const queryBuilder = getRepository(Article).createQueryBuilder();
 
         query.toLowerCase().split(' ').forEach((item, index) => {

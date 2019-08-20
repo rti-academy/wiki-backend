@@ -117,10 +117,12 @@ export class ArticleController {
      * @apiName search
      * @apiGroup article
      *
+     * @apiParam (Query params) {string} [query]
+     *
      * @apiUse ArticleListResponse
      *
      * @apiExample {curl} Пример:
-     *   curl -v http://127.0.0.1:3000/api/article
+     *   curl -v http://127.0.0.1:3000/api/article?query=test
      */
     @Get('/')
     public async search(

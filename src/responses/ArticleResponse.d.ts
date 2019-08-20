@@ -1,8 +1,8 @@
 import { ArticleData } from './ArticleData';
 
 /**
- * @apiDefine ArticleListResponse
- * @apiSuccess {Object[]} articles
+ * @apiDefine ArticleResponse
+ * @apiSuccess {Object} article
  * @apiSuccess {number} .id
  * @apiSuccess {string} .title
  * @apiSuccess {string} .content
@@ -11,6 +11,6 @@ import { ArticleData } from './ArticleData';
  * @apiSuccess {string} .creationTime
  * @apiSuccess {string} .updateTime
  */
-export class ArticleListResponse {
-    articles: ArticleData[];
+export interface ArticleResponse {
+    article: ArticleData;
 }
