@@ -8,6 +8,7 @@ import {
     OnUndefined,
     Param,
     BodyParam,
+    QueryParam,
 } from 'routing-controllers';
 
 import { ArticleService } from '../services/ArticleService';
@@ -122,8 +123,10 @@ export class ArticleController {
      *   curl -v http://127.0.0.1:3000/api/article
      */
     @Get('/')
-    public async search(): Promise<ArticleListResponse> {
-        const articles = await this.articleService.search();
+    public async search(
+        @QueryParam('query') query?: string
+    ): Promise<ArticleListResponse> {
+        const articles = await this.articleService.search(query);
         return { articles };
     }
 

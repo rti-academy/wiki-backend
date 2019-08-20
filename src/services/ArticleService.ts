@@ -46,8 +46,29 @@ export class ArticleService {
         return getRepository(Article).findOneOrFail(id);
     }
 
-    public async search(): Promise<ArticleData[]> {
+    public async search(query?: string): Promise<ArticleData[]> {
+        return query
+            ? this.getByQuery(query)
+            : this.getAll();
+    }
+
+    private async getAll(): Promise<ArticleData[]> {
         return getRepository(Article).find();
+    }
+
+    private async getByQuery(query: string): Promise<ArticleData[]> {
+        const queryBuilder = getRepository(Article).createQueryBuilder();
+
+        query.toLowerCase().split(' ').forEach((item, index) => {
+            const name = `item_${index}`;
+            const value = `%${item}%`;
+
+            queryBuilder
+                .orWhere(`lower(title) like :${name}`, { [name]: value })
+                .orWhere(`lower(content) like :${name}`, { [name]: value });
+        });
+
+        return queryBuilder.getMany();
     }
 
 }
