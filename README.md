@@ -19,3 +19,13 @@ npm run serve
 npm run build
 npm run start
 ```
+
+## Документация API
+
+Собрать документацию:
+
+```
+npm run apidoc
+```
+
+Путь к документации: `public/index.html`

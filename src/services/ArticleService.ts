@@ -46,7 +46,7 @@ export class ArticleService {
         return getRepository(Article).findOneOrFail(id);
     }
 
-    public async find(): Promise<ArticleData[]> {
+    public async search(): Promise<ArticleData[]> {
         return getRepository(Article).find();
     }
 
