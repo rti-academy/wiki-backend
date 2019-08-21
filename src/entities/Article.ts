@@ -1,4 +1,5 @@
-import { PrimaryGeneratedColumn, Column, Entity } from 'typeorm';
+import { PrimaryGeneratedColumn, Column, Entity, ManyToMany, JoinTable } from 'typeorm';
+import { Tag } from './Tag';
 
 export enum NodeType {
     Note = 'note',
@@ -31,5 +32,9 @@ export class Article {
 
     @Column({ name: 'update_time' })
     public updateTime: string;
+
+    @ManyToMany(type => Tag)
+    @JoinTable()
+    tags: Tag[];
 
 }
