@@ -8,12 +8,15 @@ import {
     OnUndefined,
     Param,
     BodyParam,
-    QueryParam,
+    QueryParams,
 } from 'routing-controllers';
 
 import { ArticleService } from '../services/ArticleService';
+
 import { CreateArticleBody } from '../requests/CreateArticleBody';
 import { UpdateArticleBody } from '../requests/UpdateArticleBody';
+import { SearchArticleQuery } from '../requests/SearchArticleQuery';
+
 import { ArticleResponse } from '../responses/ArticleResponse';
 import { ArticleListResponse } from '../responses/ArticleListResponse';
 
@@ -31,8 +34,11 @@ export class ArticleController {
      *
      * @apiSuccess (Success 201) Created Successfully created
      *
-     * @apiExample {curl} Пример:
-     *   curl -v -H "Content-Type: application/json" -d '{"article":{"title":"Test","content":"Test","parentId":0}}' http://127.0.0.1:3000/api/article
+     * @apiExample {curl} Создать статью
+     *   curl -v -H "Content-Type: application/json" -d '{"article":{"parentId":0,"title":"Test","content":"Test"}}' http://127.0.0.1:3000/api/article
+     *
+     * @apiExample {curl} Создать рубрику
+     *   curl -v -H "Content-Type: application/json" -d '{"article":{"parentId":0,"title":"Test","type":"rubric"}}' http://127.0.0.1:3000/api/article
      */
     @Post('/')
     @HttpCode(201)
@@ -56,7 +62,7 @@ export class ArticleController {
      *
      * @apiError (Not Found 404) NotFoundError <code>id</code> was not found
      *
-     * @apiExample {curl} Пример:
+     * @apiExample {curl} Пример
      *   curl -v -X PUT -H "Content-Type: application/json" -d '{"article":{"title":"Test!"}}' http://127.0.0.1:3000/api/article/1
      */
     @Put('/:id')
@@ -79,7 +85,7 @@ export class ArticleController {
      *
      * @apiError (Not Found 404) NotFoundError <code>id</code> was not found
      *
-     * @apiExample {curl} Пример:
+     * @apiExample {curl} Пример
      *   curl -v -X DELETE http://127.0.0.1:3000/api/article/1
      */
     @Delete('/:id')
@@ -101,7 +107,7 @@ export class ArticleController {
      *
      * @apiError (Not Found 404) articleNotFoundError <code>id</code> was not found
      *
-     * @apiExample {curl} Пример:
+     * @apiExample {curl} Пример
      *   curl -v http://127.0.0.1:3000/api/article/1
      */
     @Get('/:id')
@@ -117,16 +123,25 @@ export class ArticleController {
      * @apiName search
      * @apiGroup article
      *
-     * @apiParam (Query params) {string} [query]
+     * @apiUse SearchArticleQuery
      *
      * @apiUse ArticleListResponse
      *
-     * @apiExample {curl} Пример:
-     *   curl -v http://127.0.0.1:3000/api/article?query=test
+     * @apiExample {curl} Полный список
+     *   curl -v http://127.0.0.1:3000/api/article
+     *
+     * @apiExample {curl} Список рубрик
+     *   curl -v http://127.0.0.1:3000/api/article?type=rubric
+     *
+     * @apiExample {curl} Поиск по статьям
+     *   curl -v http://127.0.0.1:3000/api/article?type=rubric&query=test
+     *
+     * @apiExample {curl} Поиск по рубрикам
+     *   curl -v http://127.0.0.1:3000/api/article?type=note&query=test
      */
     @Get('/')
     public async search(
-        @QueryParam('query') query?: string
+        @QueryParams() query: SearchArticleQuery
     ): Promise<ArticleListResponse> {
         const articles = await this.articleService.search(query);
         return { articles };

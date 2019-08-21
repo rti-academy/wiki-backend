@@ -1,8 +1,6 @@
-export interface ArticleData {
-    id: number;
-    title: string;
-    content: string;
-    parentId: number;
+import { NodeData } from './NodeData';
+
+export interface ArticleData extends NodeData {
     version: number;
     creationTime: string;
     updateTime: string;

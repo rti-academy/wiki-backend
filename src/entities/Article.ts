@@ -1,5 +1,10 @@
 import { PrimaryGeneratedColumn, Column, Entity } from 'typeorm';
 
+export enum NodeType {
+    Note = 'note',
+    Rubric = 'rubric',
+}
+
 @Entity('article')
 export class Article {
 
@@ -8,6 +13,9 @@ export class Article {
 
     @Column()
     public title: string;
+
+    @Column({ default: NodeType.Note })
+    public type: NodeType;
 
     @Column()
     public content: string;

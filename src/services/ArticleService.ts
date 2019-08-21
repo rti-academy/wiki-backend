@@ -1,16 +1,31 @@
 import { getRepository, getConnection } from 'typeorm';
 
-import { Article } from '../entities/Article';
+import { SearchArticleQueryBuilder } from './SearchArticleQueryBuilder';
+import { Article, NodeType } from '../entities/Article';
+
 import { CreateArticleBody } from '../requests/CreateArticleBody';
 import { UpdateArticleBody } from '../requests/UpdateArticleBody';
+import { SearchArticleQuery } from '../requests/SearchArticleQuery';
+
+import { NodeData } from '../responses/NodeData';
 
 export class ArticleService {
 
-    public async create(data: CreateArticleBody): Promise<number> {
+    public async create({
+        type = NodeType.Note,
+        content = '',
+        ...data
+    }: CreateArticleBody): Promise<number> {
         const time = new Date();
+
+        if (data.parentId) {
+            getRepository(Article).findOneOrFail(data.parentId);
+        }
 
         const { id } = await getRepository(Article).save({
             ...data,
+            type,
+            content,
             version: 1,
             creationTime: time.toISOString(),
             updateTime: time.toISOString(),
@@ -21,6 +36,10 @@ export class ArticleService {
 
     public async update(id: number, data: UpdateArticleBody): Promise<void> {
         getRepository(Article).findOneOrFail(id);
+
+        if (data.parentId) {
+            getRepository(Article).findOneOrFail(data.parentId);
+        }
 
         const time = new Date();
 
@@ -45,27 +64,16 @@ export class ArticleService {
         return getRepository(Article).findOneOrFail(id);
     }
 
-    public async search(query?: string): Promise<Article[]> {
-        return query
-            ? this.getByQuery(query)
-            : this.getAll();
-    }
+    public async search({ query, type }: SearchArticleQuery): Promise<NodeData[]> {
+        const queryBuilder = new SearchArticleQueryBuilder();
 
-    private async getAll(): Promise<Article[]> {
-        return getRepository(Article).find();
-    }
+        if (query) {
+            queryBuilder.buildSearchQuery(query);
+        }
 
-    private async getByQuery(query: string): Promise<Article[]> {
-        const queryBuilder = getRepository(Article).createQueryBuilder();
-
-        query.toLowerCase().split(' ').forEach((item, index) => {
-            const name = `item_${index}`;
-            const value = `%${item}%`;
-
-            queryBuilder
-                .orWhere(`lower(title) like :${name}`, { [name]: value })
-                .orWhere(`lower(content) like :${name}`, { [name]: value });
-        });
+        if (type) {
+            queryBuilder.buildTypeFilter(type)
+        }
 
         return queryBuilder.getMany();
     }
