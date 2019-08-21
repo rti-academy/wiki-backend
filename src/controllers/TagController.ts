@@ -1,10 +1,13 @@
-import { JsonController, Post, Delete, Get, BodyParam, QueryParam } from 'routing-controllers';
+import { JsonController, Post, Delete, Get, BodyParam, QueryParam, Param, HttpCode, OnUndefined } from 'routing-controllers';
 
 import { AddTagBody } from '../requests/AddTagBody';
 import { TagListResponse } from '../responses/TagListResponse';
+import { TagService } from '../services/TagService';
 
 @JsonController()
 export class TagController {
+
+    private tagService: TagService = new TagService();
 
     /**
      * @api {POST} /api/article/:id/tag Добавить тег к статье
@@ -21,10 +24,13 @@ export class TagController {
      *   curl -v -H "Content-Type: application/json" -d '{"tag":{"value":"Some text"}}' http://127.0.0.1:3000/api/article/1/tag
      */
     @Post('/article/:id/tag')
+    @HttpCode(201)
     public async addToArticle(
-        @BodyParam('tag', { required: true }) body: AddTagBody
+        @Param('id') aticleId: number,
+        @BodyParam('tag', { required: true }) body: AddTagBody,
     ): Promise<{ id: number }> {
-        throw new Error('addToArticle mock');
+        const id = await this.tagService.addTagToArticle(aticleId, body);
+        return { id };
     }
 
     /**
@@ -43,8 +49,12 @@ export class TagController {
      *   curl -v -X DELETE http://127.0.0.1:3000/api/article/1/tag/1
      */
     @Delete('/article/:id/tag/:tagId')
-    public async removeFromArticle(): Promise<void> {
-        throw new Error('removeFromArticle mock');
+    @OnUndefined(204)
+    public async removeFromArticle(
+        @Param('id') articleId: number,
+        @Param('tagId') tagId: number,
+    ): Promise<void> {
+        await this.tagService.deleteTagFromArticle(articleId, tagId);
     }
 
     /**
@@ -60,8 +70,11 @@ export class TagController {
      *   curl -v http://127.0.0.1:3000/api/article/1/tag
      */
     @Get('/article/:id/tag')
-    public async getByArticle(): Promise<TagListResponse> {
-        throw new Error('getByArticle mock');
+    public async getByArticle(
+        @Param('id') articleId: number,
+    ): Promise<TagListResponse> {
+        const tags = await this.tagService.getTagsByArticle(articleId);
+        return { tags };
     }
 
     /**
@@ -80,7 +93,8 @@ export class TagController {
     public async search(
         @QueryParam('query') query?: string
     ): Promise<TagListResponse> {
-        throw new Error('search mock');
+        const tags = await this.tagService.search(query);
+        return { tags };
     }
 
 }
