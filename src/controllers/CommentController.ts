@@ -8,11 +8,11 @@ import {
     OnUndefined,
     Param,
     BodyParam,
+    QueryParam,
 } from 'routing-controllers';
 
 import { CommentService } from '../services/CommentService';
 import { CreateCommentBody } from '../requests/CreateCommentBody';
-import { CommentResponse } from '../responses/CommentResponse';
 import { UpdateCommentBody } from '../requests/UpdateCommentBody';
 import { CommentListResponse } from '../responses/CommentListResponse';
 
@@ -64,7 +64,8 @@ export class CommentContrller {
         @Param('id') id: number,
         @BodyParam('comment', { required: true }) body: UpdateCommentBody
     ): Promise<void> {
-        await this.commentService.update(id, body);
+        const { text } = body;
+        await this.commentService.update(id, { text });
     }
 
     /**
@@ -89,15 +90,6 @@ export class CommentContrller {
         await this.commentService.delete(id);
     }
 
-    // TODO: Remove
-    @Get('/:id')
-    public async get(
-        @Param('id') id: number,
-    ): Promise<CommentResponse> {
-        const comment = await this.commentService.get(id);
-        return { comment };
-    }
-
     /**
      * @api {GET} /api/comment Получить список комментариев
      * @apiName getByArticle
@@ -111,8 +103,10 @@ export class CommentContrller {
      *   curl -v http://127.0.0.1:3000/api/comment?articleId=1
      */
     @Get('/')
-    public async getByArticle(): Promise<CommentListResponse> {
-        const comments = await this.commentService.search();
+    public async getByArticle(
+        @QueryParam('articleId') articleId: number,
+    ): Promise<CommentListResponse> {
+        const comments = await this.commentService.getByArticle(articleId);
         return { comments };
     }
 

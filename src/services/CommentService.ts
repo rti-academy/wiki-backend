@@ -40,7 +40,10 @@ export class CommentService {
         return getRepository(Comment).findOneOrFail(id);
     }
 
-    public async search(): Promise<CommentData[]> {
-        return getRepository(Comment).find();
+    public async getByArticle(articleId: number): Promise<CommentData[]> {
+        const commentQuery = getRepository(Comment).createQueryBuilder();
+        return commentQuery
+                .where('article_id = :articleId', { articleId })
+                .getMany();
     }
 }
