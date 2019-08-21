@@ -46,7 +46,7 @@ npm run build
 ### Удаление лишних зависимостей
 
 ```
-npm install --prod
+npm prune --production
 ```
 
 ### Запуск
