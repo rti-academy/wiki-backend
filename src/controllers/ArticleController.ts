@@ -35,7 +35,7 @@ export class ArticleController {
      * @apiSuccess (Success 201) Created Successfully created
      *
      * @apiExample {curl} Создать статью
-     *   curl -v -H "Content-Type: application/json" -d '{"article":{"parentId":0,"title":"Test","content":"Test"}}' http://127.0.0.1:3000/api/article
+     *   curl -v -H "Content-Type: application/json" -d '{"article":{"parentId":0,"title":"Test","type":"note","content":"Test"}}' http://127.0.0.1:3000/api/article
      *
      * @apiExample {curl} Создать рубрику
      *   curl -v -H "Content-Type: application/json" -d '{"article":{"parentId":0,"title":"Test","type":"rubric"}}' http://127.0.0.1:3000/api/article
@@ -134,10 +134,10 @@ export class ArticleController {
      *   curl -v http://127.0.0.1:3000/api/article?type=rubric
      *
      * @apiExample {curl} Поиск по статьям
-     *   curl -v http://127.0.0.1:3000/api/article?type=rubric&query=test
+     *   curl -v http://127.0.0.1:3000/api/article?type=note&query=test
      *
      * @apiExample {curl} Поиск по рубрикам
-     *   curl -v http://127.0.0.1:3000/api/article?type=note&query=test
+     *   curl -v http://127.0.0.1:3000/api/article?type=rubric&query=test
      */
     @Get('/')
     public async search(
