@@ -1,5 +1,6 @@
-import { PrimaryGeneratedColumn, Column, Entity, ManyToMany, JoinTable } from 'typeorm';
+import { PrimaryGeneratedColumn, Column, Entity, ManyToMany, JoinTable, OneToMany } from 'typeorm';
 import { Tag } from './Tag';
+import { File } from './File';
 
 export enum NodeType {
     Note = 'note',
@@ -37,4 +38,6 @@ export class Article {
     @JoinTable()
     tags: Tag[];
 
+    @OneToMany(type => File, file => file.article)
+    public files: File[];
 }
