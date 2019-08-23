@@ -25,7 +25,7 @@ export class TagService {
         const article = await this.getArticleWithTags(articleId);
 
         if (article.tags.findIndex(t => t.id === tag.id) < 0) {
-            article.tags.push(tag);    
+            article.tags.push(tag);
             await articleRepository.save(article);
         }
 
@@ -39,11 +39,11 @@ export class TagService {
 
     public async deleteTagFromArticle(articleId: number, tagId: number) {
         await getRepository(Tag).findOneOrFail(tagId);
-        
+
         const article = await this.getArticleWithTags(articleId);
 
         const tagIndex = article.tags.findIndex(t => t.id === tagId);
-        
+
         if (tagIndex >= 0) {
             article.tags.splice(tagIndex, 1);
             getRepository(Article).save(article);
@@ -51,7 +51,7 @@ export class TagService {
     }
 
     public async search(query?: string): Promise<Tag[]> {
-        return query 
+        return query
                 ? this.getByQuery(query)
                 : this.getAll();
 
@@ -69,7 +69,7 @@ export class TagService {
             const value = `%${item}%`;
 
             queryBuilder
-                .orWhere(`lower(value) like :${name}`, { [name]: value });
+                .orWhere(`value ilike :${name}`, { [name]: value });
         });
 
         return queryBuilder.getMany();

@@ -5,8 +5,17 @@
 - node 10.x
 - npm 6.x
 - pm2 3.x
+- postgres >= 10.3
+- psql >= 10.3
 
 ## Настройка
+
+### Создание DB
+
+```
+psql -d postgres -c "CREATE ROLE wiki WITH LOGIN ENCRYPTED PASSWORD '123qwe';"
+psql -c "create database wiki owner wiki encoding 'UTF8' lc_collate 'ru_RU.UTF-8'LC_CTYPE 'ru_RU.UTF-8' template template0;" postgres
+```
 
 ### Установка зависимостей
 

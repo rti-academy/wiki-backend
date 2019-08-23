@@ -21,8 +21,8 @@ export class SearchArticleQueryBuilder {
                 const name = `item_${index}`;
                 const value = `%${item}%`;
 
-                qb.orWhere(`lower(title) like :${name}`, { [name]: value })
-                    .orWhere(`lower(content) like :${name}`, { [name]: value });
+                qb.orWhere(`title ilike :${name}`, { [name]: value })
+                    .orWhere(`content ilike :${name}`, { [name]: value });
             });
         }));
 
@@ -36,7 +36,6 @@ export class SearchArticleQueryBuilder {
     }
 
     public async getMany(): Promise<NodeData[]> {
-        console.log(this.queryBuilder.getQuery(), this.queryBuilder.getParameters());
         return this.queryBuilder.getMany();
     }
 
