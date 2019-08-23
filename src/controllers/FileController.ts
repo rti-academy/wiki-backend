@@ -1,6 +1,7 @@
 import {
     JsonController,
     Post,
+    Delete,
     Get,
     HttpCode,
     UploadedFile,
@@ -35,7 +36,7 @@ export class FileController {
     private fileService: FileService = new FileService();
 
     /**
-     * @api {POST} /api/article/:id/file Загрузить файл
+     * @api {POST} /api/article/:articleId/file Загрузить файл
      * @apiName create
      * @apiGroup file
      *
@@ -61,11 +62,34 @@ export class FileController {
     }
 
     /**
-     * @api {GET} /api/article/:id/file/:fileId Скачать файл
+     * @api {DELETE} /api/article/:articleId/file/:fileId Удалить файл
+     * @apiName delete
+     * @apiGroup tag
+     *
+     * @apiParam (Route params) {number} articleId
+     * @apiParam (Route params) {number} fileId
+     *
+     * @apiSuccess (Success 204) NoContent Successfully deleted
+     *
+     * @apiError (Not Found 404) NotFoundError <code>id</code> was not found
+     *
+     * @apiExample {curl} Пример:
+     *   curl -v -X DELETE http://127.0.0.1:3000/api/article/2/file/1
+     */
+    @OnUndefined(204)
+    @Delete('/:fileId')
+    public async delete(
+        @Param('fileId') fileId: number,
+    ): Promise<void> {
+        await this.fileService.delete(fileId);
+    }
+
+    /**
+     * @api {GET} /api/article/:articleId/file/:fileId Скачать файл
      * @apiName download
      * @apiGroup file
      *
-     * @apiParam (Route params) {number} id
+     * @apiParam (Route params) {number} articleId
      * @apiParam (Route params) {number} fileId
      *
      * @apiSuccess (Redirect 307) TemporaryRedirect
@@ -85,11 +109,11 @@ export class FileController {
     }
 
     /**
-     * @api {GET} /api/article/:id/file Получить файлы статьи
+     * @api {GET} /api/article/:articleId/file Получить файлы статьи
      * @apiName get
      * @apiGroup file
      *
-     * @apiParam (Route params) {number} id
+     * @apiParam (Route params) {number} articleId
      *
      * @apiUse FileListResponse
      *
