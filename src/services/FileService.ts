@@ -1,30 +1,38 @@
 import * as fs from 'fs';
-import * as path from 'path';
 import { getRepository } from 'typeorm';
 
 import { File } from '../entities/File';
 import { Article } from '../entities/Article';
 
-const UPLOADS_PATH = path.resolve(__dirname, '../..', 'uploads');
+interface CreateParams {
+    articleId: number;
+    name: string;
+    originalName: string;
+}
 
 export class FileService {
 
-    public async create(name: string, articleId: number): Promise<File> {
+    public async create({
+        articleId,
+        name,
+        originalName = name
+    }: CreateParams): Promise<File> {
         const article = await getRepository(Article).findOneOrFail(articleId);
         return getRepository(File).save({
             name,
-            article: article
+            originalName,
+            article
         });
     }
 
     public async delete(id: number): Promise<void> {
-        const { name } = await getRepository(File).findOneOrFail(id);
+        const file = await getRepository(File).findOneOrFail(id);
 
         await getRepository(File).delete(id);
 
-        fs.unlink(`${UPLOADS_PATH}/${name}`, err => {
+        fs.unlink(file.getPath(), err => {
             if (err) {
-                console.log(`Can't delete ${name}`);
+                console.log(`Can't delete file ${file.name}`);
             }
         });
     }

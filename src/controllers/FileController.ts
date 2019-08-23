@@ -28,8 +28,6 @@ const uploadOptions: multer.Options = {
     })
 };
 
-const STATIC_URL = '/static';
-
 @JsonController('/article/:articleId/file')
 export class FileController {
 
@@ -57,7 +55,12 @@ export class FileController {
         @Param('articleId') articleId: number,
         @UploadedFile('file', { options: uploadOptions }) file: Express.Multer.File
     ): Promise<FileResponse> {
-        const { article, ...data } = await this.fileService.create(file.filename, articleId);
+        const { article, ...data } = await this.fileService.create({
+            originalName: file.originalname,
+            name: file.filename,
+            articleId,
+        });
+
         return { file: data };
     }
 
@@ -103,8 +106,8 @@ export class FileController {
         @Param('fileId') fileId: number,
         @Res() response: Response,
     ): Promise<any> {
-        const { name } = await this.fileService.get(fileId);
-        response.location(`${STATIC_URL}/${name}`);
+        const file = await this.fileService.get(fileId);
+        response.location(file.getUrl());
         response.setHeader('Cache-control', 'no-cache, no-store, max-age=0, must-revalidate');
     }
 
@@ -125,7 +128,12 @@ export class FileController {
         @Param('articleId') articleId: number,
     ): Promise<FileListResponse> {
         const files = await this.fileService.getByArticle(articleId);
-        return { files };
+        return {
+            files: files.map(item => ({
+                id: item.id,
+                name: item.originalName,
+            }))
+        };
     }
 
 }
