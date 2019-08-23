@@ -3,7 +3,7 @@ import * as path from 'path';
 
 import { Article } from './Article';
 
-const STATIC_URL = '/static';
+const UPLOADS_URL = '/uploads';
 const UPLOADS_PATH = path.resolve(__dirname, '../..', 'uploads');
 
 @Entity('file')
@@ -31,7 +31,7 @@ export class File {
     public article: Article;
 
     public getUrl(): string {
-        return `${STATIC_URL}/${this.name}`;
+        return `${UPLOADS_URL}/${this.name}`;
     }
 
     public getPath(): string {

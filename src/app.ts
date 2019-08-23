@@ -19,7 +19,7 @@ async function run(port: number): Promise<void> {
         controllers: [__dirname + '/controllers/*'],
         middlewares: [__dirname + '/middlewares/*'],
     });
-    app.use('/static', express.static(path.resolve(__dirname, '..', 'uploads')));
+    app.use('/uploads', express.static(path.resolve(__dirname, '..', 'uploads')));
 
     app.listen(port, () => console.log(`Server started on port ${port}`));
 }
