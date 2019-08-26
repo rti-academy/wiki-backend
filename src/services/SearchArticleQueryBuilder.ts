@@ -10,7 +10,7 @@ export class SearchArticleQueryBuilder {
     constructor() {
         this.queryBuilder = getRepository(Article)
             .createQueryBuilder('article')
-            .select(['article.id', 'article.title', 'article.type', 'article.parentId']);
+            .select(['article.id', 'article.title', 'article.type', 'article.parentId', 'article.status']);
     }
 
     public buildSearchQuery(query: string): SearchArticleQueryBuilder {

@@ -6,7 +6,9 @@ import { ArticleData } from './ArticleData';
  * @apiSuccess {number} .id
  * @apiSuccess {string} .title
  * @apiSuccess {string} .content
+ * @apiSuccess {string="note","rubric"} .type
  * @apiSuccess {number} .parentId
+ * @apiSuccess {string="draft","active","archive"} .status
  * @apiSuccess {number} .version
  * @apiSuccess {string} .creationTime
  * @apiSuccess {string} .updateTime

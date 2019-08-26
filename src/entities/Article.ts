@@ -1,10 +1,17 @@
 import { PrimaryGeneratedColumn, Column, Entity, ManyToMany, JoinTable, OneToMany } from 'typeorm';
+
 import { Tag } from './Tag';
 import { File } from './File';
 
 export enum NodeType {
     Note = 'note',
     Rubric = 'rubric',
+}
+
+export enum Status {
+    Draft = 'draft',
+    Active = 'active',
+    Archive = 'archive',
 }
 
 @Entity('article')
@@ -24,6 +31,9 @@ export class Article {
 
     @Column({ name: 'parent_id' })
     public parentId: number;
+
+    @Column({ default: Status.Draft })
+    public status: Status;
 
     @Column()
     public version: number;

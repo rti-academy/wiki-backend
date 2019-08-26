@@ -1,4 +1,5 @@
 import { NodeType } from '../entities/Article';
+import { Status } from '../entities/Article';
 
 /**
  * @apiDefine CreateArticleBody
@@ -7,6 +8,7 @@ import { NodeType } from '../entities/Article';
  * @apiParam (Body params) {string="note","rubric"} [.type]
  * @apiParam (Body params) {string} [.content]
  * @apiParam (Body params) {number} .parentId
+ * @apiParam (Body params) {string="draft","active","archive"} [.status]
  */
 export class CreateArticleBody {
 
@@ -17,5 +19,7 @@ export class CreateArticleBody {
     public content?: string;
 
     public parentId: number;
+
+    public status?: Status;
 
 }

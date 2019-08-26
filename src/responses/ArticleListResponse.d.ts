@@ -7,6 +7,7 @@ import { NodeData } from './NodeData';
  * @apiSuccess {string} .title
  * @apiSuccess {string="note","rubric"} .type
  * @apiSuccess {number} .parentId
+ * @apiSuccess {string="draft","active","archive"} .status
  */
 export interface ArticleListResponse {
     articles: NodeData[];
