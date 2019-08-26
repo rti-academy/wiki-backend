@@ -7,6 +7,10 @@ import { Container } from 'typedi';
 
 const ormconfig = require('./ormconfig');
 
+const PORT = process.env.NODE_ENV === 'prod' ?
+    3000 :
+    3010;
+
 async function run(port: number): Promise<void> {
     useContainer(Container);
 
@@ -24,4 +28,4 @@ async function run(port: number): Promise<void> {
     app.listen(port, () => console.log(`Server started on port ${port}`));
 }
 
-run(3000);
+run(PORT);
