@@ -4,7 +4,7 @@ export const config: ConnectionOptions = {
     type: 'postgres',
     host: 'localhost',
     port: 5432,
-    username: 'wiki',
+    username: 'gorod',
     password: '123qwe',
     database: 'wiki',
     entities: [__dirname + '/entities/*'],
