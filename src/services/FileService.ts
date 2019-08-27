@@ -42,8 +42,9 @@ export class FileService {
     }
 
     public async getByArticle(articleId: number): Promise<File[]> {
+        const article = await getRepository(Article).findOneOrFail(articleId);
         return getRepository(File).find({
-            where: { articleId }
+            where: { article }
         });
     }
 
