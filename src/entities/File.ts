@@ -3,7 +3,8 @@ import * as path from 'path';
 
 import { Article } from './Article';
 
-const UPLOADS_URL = '/uploads';
+const UPLOADS_HOSTNAME = process.env.UPLOADS_HOSTNAME || '';
+const UPLOADS_URL = `${UPLOADS_HOSTNAME}/uploads`;
 const UPLOADS_PATH = path.resolve(__dirname, '../..', 'uploads');
 
 @Entity('file')
